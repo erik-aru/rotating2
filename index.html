@@ -1,9 +1,60 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>My GitHub Page</title>
+  <meta charset="UTF-8">
+  <title>Login Demo</title>
 </head>
 <body>
-  <h1>Hello from GitHub Pages!</h1>
+  <div id="login-container">
+    <h2>Login</h2>
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="password" placeholder="Password">
+    <button onclick="login()">Login</button>
+  </div>
+
+  <div id="app-content" style="display:none;">
+    <h1>Welcome, you're logged in!</h1>
+    <button onclick="logout()">Logout</button>
+  </div>
+
+  <!-- Firebase JS SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-auth-compat.js"></script>
+
+  <script>
+    // Replace this with your own config
+    const firebaseConfig = {
+      apiKey: "AIzaSyCRP0Ike-6l1Vsnz_f_n41ogG9l6ubMTIE",
+      authDomain: "rotation-2fc0d.firebaseapp.com",
+      projectId: "rotation-2fc0d",
+      // other config if needed
+    };
+
+    firebase.initializeApp(firebaseConfig);
+
+    // Auth state listener
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        document.getElementById("login-container").style.display = "none";
+        document.getElementById("app-content").style.display = "block";
+      } else {
+        document.getElementById("login-container").style.display = "block";
+        document.getElementById("app-content").style.display = "none";
+      }
+    });
+
+    function login() {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      firebase.auth().signInWithEmailAndPassword(email, password)
+        .catch(error => {
+          alert("Login failed: " + error.message);
+        });
+    }
+
+    function logout() {
+      firebase.auth().signOut();
+    }
+  </script>
 </body>
 </html>
