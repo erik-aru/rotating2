@@ -13,7 +13,7 @@
   </div>
 
   <div id="app-content" style="display:none;">
-    <h1>Welcome, you're logged in!</h1>
+    <div id="protected-area"></div>
     <button onclick="logout()">Logout</button>
   </div>
 
@@ -33,15 +33,21 @@
     firebase.initializeApp(firebaseConfig);
 
     // Auth state listener
-    firebase.auth().onAuthStateChanged(user => {
-      if (user) {
-        document.getElementById("login-container").style.display = "none";
-        document.getElementById("app-content").style.display = "block";
-      } else {
-        document.getElementById("login-container").style.display = "block";
-        document.getElementById("app-content").style.display = "none";
-      }
-    });
+firebase.auth().onAuthStateChanged(user => {
+  if (user) {
+    document.getElementById("login-container").style.display = "none";
+    document.getElementById("app-content").style.display = "block";
+
+    // Load sensitive content *after* login
+    document.getElementById("protected-area").innerHTML = `
+      <h2>Welcome, ${user.email}</h2>
+      <p>This content is loaded only for logged-in users.</p>
+    `;
+  } else {
+    document.getElementById("login-container").style.display = "block";
+    document.getElementById("app-content").style.display = "none";
+  }
+});
 
     function login() {
       const email = document.getElementById("email").value;
