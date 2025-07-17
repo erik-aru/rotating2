@@ -45,18 +45,30 @@ firebase.auth().onAuthStateChanged(user => {
     document.getElementById("login-container").style.display = "none";
     document.getElementById("app-content").style.display = "block";
 
-    // Fetch protected content
-    db.collection("protectedContent").doc("pageData").get()
-      .then(doc => {
-        if (doc.exists) {
-          document.getElementById("protected-content").innerHTML = doc.data().htmlContent;
+db.collection("protectedContent").doc("pageData").get()
+  .then(doc => {
+    if (doc.exists) {
+      document.getElementById("protected-content").innerHTML = doc.data().htmlContent;
+
+      // Re-execute any <script> tags manually if needed (optional)
+      const scripts = document.querySelectorAll("#protected-content script");
+      scripts.forEach(script => {
+        const newScript = document.createElement("script");
+        if (script.src) {
+          newScript.src = script.src;
         } else {
-          document.getElementById("protected-content").innerText = "No content found.";
+          newScript.textContent = script.textContent;
         }
-      })
-      .catch(error => {
-        console.error("Error loading content:", error);
+        document.body.appendChild(newScript);
       });
+
+    } else {
+      document.getElementById("protected-content").innerText = "No content found.";
+    }
+  })
+  .catch(error => {
+    console.error("Error loading content:", error);
+  });
 
   } else {
     document.getElementById("login-container").style.display = "block";
