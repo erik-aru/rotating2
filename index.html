@@ -3,6 +3,31 @@
 <head>
   <meta charset="UTF-8">
   <title>Login Demo</title>
+
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background-color: black;
+  }
+
+  #app-content {
+    height: 100%;
+  }
+
+  #protected-content {
+    height: 100%;
+  }
+
+  iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+</style>
+
+  
 </head>
 <body>
   <div id="login-container">
@@ -50,17 +75,17 @@ db.collection("protectedContent").doc("pageData").get()
     if (doc.exists) {
       document.getElementById("protected-content").innerHTML = doc.data().htmlContent;
 
-      // Re-execute any <script> tags manually if needed (optional)
-      // const scripts = document.querySelectorAll("#protected-content script");
-      // scripts.forEach(script => {
-      //   const newScript = document.createElement("script");
-      //   if (script.src) {
-      //     newScript.src = script.src;
-      //   } else {
-      //     newScript.textContent = script.textContent;
-      //   }
-      //   document.body.appendChild(newScript);
-      // });
+      //Re-execute any <script> tags manually if needed (optional)
+      const scripts = document.querySelectorAll("#protected-content script");
+      scripts.forEach(script => {
+        const newScript = document.createElement("script");
+        if (script.src) {
+          newScript.src = script.src;
+        } else {
+          newScript.textContent = script.textContent;
+        }
+        document.body.appendChild(newScript);
+      });
 
     } else {
       document.getElementById("protected-content").innerText = "No content found.";
