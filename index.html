@@ -51,16 +51,16 @@ db.collection("protectedContent").doc("pageData").get()
       document.getElementById("protected-content").innerHTML = doc.data().htmlContent;
 
       // Re-execute any <script> tags manually if needed (optional)
-      const scripts = document.querySelectorAll("#protected-content script");
-      scripts.forEach(script => {
-        const newScript = document.createElement("script");
-        if (script.src) {
-          newScript.src = script.src;
-        } else {
-          newScript.textContent = script.textContent;
-        }
-        document.body.appendChild(newScript);
-      });
+      // const scripts = document.querySelectorAll("#protected-content script");
+      // scripts.forEach(script => {
+      //   const newScript = document.createElement("script");
+      //   if (script.src) {
+      //     newScript.src = script.src;
+      //   } else {
+      //     newScript.textContent = script.textContent;
+      //   }
+      //   document.body.appendChild(newScript);
+      // });
 
     } else {
       document.getElementById("protected-content").innerText = "No content found.";
